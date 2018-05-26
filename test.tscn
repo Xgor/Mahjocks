@@ -1,0 +1,17 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://Playfield.gd" type="Script" id=1]
+[ext_resource path="res://MajhongPieces.png" type="Texture" id=2]
+
+[node name="Node2D" type="Node2D" index="0"]
+
+[node name="Node2D" type="Node2D" parent="." index="0"]
+
+scale = Vector2( 1.5, 1.5 )
+script = ExtResource( 1 )
+_sections_unfolded = [ "Transform" ]
+majhongTexture = ExtResource( 2 )
+playfieldSize = Vector2( 8, 10 )
+fallSpeed = 20
+
+
