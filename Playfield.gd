@@ -17,13 +17,15 @@ var playerBlockPos = Vector2(0,0)
 var playerPieceDir = dir.right
 var centerPieceTile = 0
 var sidePieceTile = 0
+var tilesToUse = 8
+var comboCount = 0
 export var fallSpeed = 20
 
 func _ready():
 	# Called every time the node is added to the scene.
 	# Initialization here
-	
-	OS.set_window_title("Mah")
+
+	OS.set_window_title("Mahjocks")
 	OS.window_position = OS.get_screen_size()/2-OS.window_size/2
 #	OS.set_window_position(OS.get_screen_size()) 
 	
@@ -34,16 +36,18 @@ func _ready():
 		for y in range(0,playfieldSize.y):
 			blockField[x].append([])
 			blockField[x][y]=-1
-	#		blockField[x][y]=int(rand_range(-2,0)) #rand_range(0,8)'
 	
+	newPiece()
+	#		blockField[x][y]=int(rand_range(-2,0)) #rand_range(0,8)'
 
 func _input(event):
 #	if event.is_action_pressed("play_left"):
 	pass
 
-
 func _process(delta):
 #	print(Input.is_action_pressed("ui_right"))
+	
+	#if not fall():
 	if Input.is_action_just_pressed("play_left"):
 		move_left()
 	if Input.is_action_just_pressed("ui_right"):
@@ -53,8 +57,62 @@ func _process(delta):
 	elif Input.is_action_just_pressed("play_rotate_ccw"):
 		rotate_counterClockwise()
 	if Input.is_action_pressed("play_drop"):
-		move_drop()
+		if $FallTimer.time_left > 0.05:
+			var currWaitTime = $FallTimer.wait_time
+			$FallTimer.wait_time = 0.05
+			$FallTimer.start()
+			$FallTimer.wait_time = currWaitTime
+			#move_drop()
 	update()
+	pass
+
+func fall():
+	var somethingFell = false
+	for x in range(0,playfieldSize.x):
+		for y in range(playfieldSize.y-2,0,-1):
+			if blockField[x][y] > -1 and blockField[x][y+1] == -1:
+				blockField[x][y+1] = blockField[x][y]
+				blockField[x][y] = -1
+				somethingFell =true
+#	if somethingFell:
+#		matchPieces()
+	return somethingFell
+
+func matchPieces():
+	var fieldCopy = []
+	for x in range(0,playfieldSize.x):
+		fieldCopy.append([])
+		fieldCopy[x]=[]
+		for y in range(0,playfieldSize.y):
+			fieldCopy[x].append([])
+			fieldCopy[x][y]=blockField[x][y]
+	
+	var matches = 0
+	var scoreToAdd = 0
+	for x in range(0,playfieldSize.x):
+		for y in range(0,playfieldSize.y):
+			if checkMatch(x,y):
+				matches += 1
+				fieldCopy[x][y] = -3
+				scoreToAdd += matches
+	if matches > 0:
+		comboCount += 1
+		$Scoreboard.addScore(scoreToAdd*comboCount)
+		blockField = fieldCopy
+		return true
+	return false
+
+func checkMatch(x,y):
+	if (blockField[x][y] != -1 and
+	   (isSpecificTile(blockField[x][y],x+1,y) or
+	    isSpecificTile(blockField[x][y],x-1,y) or
+	    isSpecificTile(blockField[x][y],x,y+1) or
+	    isSpecificTile(blockField[x][y],x,y-1))):
+		return true
+	return false
+
+func isSpecificTile(tile,x,y):
+	return insideBoundary(x,y) and blockField[x][y] == tile
 	pass
 
 func move_left():
@@ -68,7 +126,6 @@ func move_left():
 		return false
 	playerBlockPos.x -= 1
 	return true
-	pass
 
 func move_right():
 	if tileCollision(playerBlockPos.x+1,playerBlockPos.y):
@@ -81,7 +138,6 @@ func move_right():
 		return false
 	playerBlockPos.x += 1
 	return true
-	pass
 
 func move_drop():
 	var place = false
@@ -93,7 +149,6 @@ func move_drop():
 		place = true
 	if playerPieceDir == dir.down and tileCollision(playerBlockPos.x,playerBlockPos.y+2):
 		place = true
-
 	if place:
 		placePiece()
 		return false
@@ -101,14 +156,19 @@ func move_drop():
 	playerBlockPos.y += 1
 	return true
 
-func tileCollision(x,y):
+func insideBoundary(x,y):
 	if x >= playfieldSize.x:
-		return true
+		return false
 	if x < 0:
-		return true
+		return false
 	if y >= playfieldSize.y:
-		return true
+		return false
 	if y < 0:
+		return false
+	return true
+
+func tileCollision(x,y):
+	if not insideBoundary(x,y):
 		return true
 	if blockField[x][y] != -1:
 		return true
@@ -124,8 +184,16 @@ func placePiece():
 		blockField[playerBlockPos.x][playerBlockPos.y-1] = sidePieceTile
 	if playerPieceDir == dir.down:
 		blockField[playerBlockPos.x][playerBlockPos.y+1] = sidePieceTile
+#	matchPieces()
+	newPiece()
+
+func newPiece():
+	if blockField[3][0] > -1 or blockField[4][0] > -1:
+		failed()
 	playerBlockPos.y = 0
-	playerBlockPos.x = 4
+	playerBlockPos.x = 3
+	centerPieceTile = (randi()%tilesToUse) + 9
+	sidePieceTile   = (randi()%tilesToUse) + 9
 	playerPieceDir = dir.right
 
 func rotate_clockwise():
@@ -188,13 +256,15 @@ func _draw():
 	pass
 
 func drawTile(tile,x,y):
-	if tile < 0:
+	if tile == -1:
 		return
+	elif tile < -1:
+		tile += 10
 	
-	var xPos= (x*PIECE_WIDTH)*scale.x
-	var yPos= (y*PIECE_HEIGHT)*scale.y
-	var xScale=PIECE_WIDTH*scale.x
-	var yScale=PIECE_HEIGHT*scale.y
+	var xPos= x*PIECE_WIDTH #*scale.x
+	var yPos= y*PIECE_HEIGHT#*scale.y
+	var xScale=PIECE_WIDTH #*scale.x
+	var yScale=PIECE_HEIGHT#*scale.y
 	var posRect =Rect2(xPos,yPos,xScale,yScale)
 	draw_texture_rect_region(majhongTexture,posRect,getTileRect(tile))
 	pass
@@ -203,3 +273,27 @@ func getTileRect(tile):
 	var x = PIECE_WIDTH*(tile%PIECE_HFRAMES)
 	var y = PIECE_HEIGHT*floor(tile/PIECE_HFRAMES)
 	return Rect2(x,y,PIECE_WIDTH,PIECE_HEIGHT)
+
+func flipTiles():
+	var somethingFlipped = false
+	for x in range(0,playfieldSize.x):
+		for y in range(0,playfieldSize.y):
+			if blockField[x][y] < -1:
+				blockField[x][y] += 1
+				somethingFlipped = true
+	
+	return somethingFlipped
+
+func failed():
+	get_tree().reload_current_scene()
+
+func _on_FallTimer_timeout():
+	move_drop()
+	pass # replace with function body
+
+func _on_UpdateTimer_timeout():
+	if not flipTiles():
+		if not fall():
+			if not matchPieces():
+				comboCount = 0
+	pass # replace with function body
