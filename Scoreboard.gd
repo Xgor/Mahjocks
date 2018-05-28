@@ -23,12 +23,17 @@ func addScore(value):
 
 func levelUp():
 	currentLevel+=1
-	if get_parent().tilesToUse < 32:
-		get_parent().tilesToUse += 1
+	get_parent().addTilesInUse()
+#	if get_parent().tilesToUse < 32:
+#		get_parent().tilesToUse += 1
+	
 #	owner.
 	var fallTimer =get_parent().get_node("FallTimer")
 	if fallTimer.wait_time > 0.2:
-		fallTimer.wait_time -= 0.025
+		if get_parent().tilesToUse == 32:
+			fallTimer.wait_time -= 0.010
+		else:
+			fallTimer.wait_time -= 0.005
 	updateLabels()
 	pass
 

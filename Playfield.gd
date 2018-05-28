@@ -21,10 +21,13 @@ var tilesToUse = 8
 var comboCount = 0
 export var fallSpeed = 20
 
+var tilesPool = PoolByteArray()
+
+
 func _ready():
 	# Called every time the node is added to the scene.
 	# Initialization here
-
+	randomize()
 	OS.set_window_title("Mahjocks")
 	OS.window_position = OS.get_screen_size()/2-OS.window_size/2
 #	OS.set_window_position(OS.get_screen_size()) 
@@ -36,6 +39,9 @@ func _ready():
 		for y in range(0,playfieldSize.y):
 			blockField[x].append([])
 			blockField[x][y]=-1
+	
+	for i in range(0,tilesToUse):
+		tilesPool.append(2)
 	
 	newPiece()
 	#		blockField[x][y]=int(rand_range(-2,0)) #rand_range(0,8)'
@@ -66,6 +72,12 @@ func _process(delta):
 	update()
 	pass
 
+func addTilesInUse():
+	if tilesToUse < 32:
+		tilesToUse += 1
+		tilesPool.append(2)
+	pass
+
 func fall():
 	var somethingFell = false
 	for x in range(0,playfieldSize.x):
@@ -74,6 +86,7 @@ func fall():
 				blockField[x][y+1] = blockField[x][y]
 				blockField[x][y] = -1
 				somethingFell =true
+				
 #	if somethingFell:
 #		matchPieces()
 	return somethingFell
@@ -192,9 +205,28 @@ func newPiece():
 		failed()
 	playerBlockPos.y = 0
 	playerBlockPos.x = 3
-	centerPieceTile = (randi()%tilesToUse) + 9
-	sidePieceTile   = (randi()%tilesToUse) + 9
+	centerPieceTile = getRandomTile() + 9
+	sidePieceTile   = getRandomTile() + 9
 	playerPieceDir = dir.right
+
+func getRandomTile():
+	# Check if there is any tiles left
+	var noTilesLeft = true
+	for tile in tilesPool:
+		if tile != 0:
+			noTilesLeft = false
+			break
+	# if no tiles left fill with new ones
+	if noTilesLeft:
+		for i in tilesPool.size():
+			tilesPool[i] = 2
+	# search for not depleted tile
+	while true:
+		var tile = randi()%tilesToUse
+		if tilesPool[tile] > 0:
+			tilesPool[tile] -= 1
+			return tile
+	return -1
 
 func rotate_clockwise():
 	if playerPieceDir == dir.left:
