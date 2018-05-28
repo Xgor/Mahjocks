@@ -1,0 +1,18 @@
+[remap]
+
+importer="ogg_vorbis"
+type="AudioStreamOGGVorbis"
+path="res://.import/Lobo_Loco_-_20_-_Yangtzse_River_ID_756.ogg-a31509664151edb2db0214f038e94479.oggstr"
+
+[deps]
+
+source_file="res://Lobo_Loco_-_20_-_Yangtzse_River_ID_756.ogg"
+source_md5="cce0e75530f5bbef415fe39c4040df5d"
+
+dest_files=[ "res://.import/Lobo_Loco_-_20_-_Yangtzse_River_ID_756.ogg-a31509664151edb2db0214f038e94479.oggstr" ]
+dest_md5="6920b41c2109a381eeb120e9c9057c49"
+
+[params]
+
+loop=true
+loop_offset=0

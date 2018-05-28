@@ -1,10 +1,11 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://Playfield.gd" type="Script" id=1]
 [ext_resource path="res://MajhongPieces.png" type="Texture" id=2]
 [ext_resource path="res://playfield2.png" type="Texture" id=3]
 [ext_resource path="res://Scoreboard.gd" type="Script" id=4]
 [ext_resource path="res://arial.ttf" type="DynamicFontData" id=5]
+[ext_resource path="res://Lobo_Loco_-_20_-_Yangtzse_River_ID_756.ogg" type="AudioStream" id=6]
 
 [sub_resource type="DynamicFont" id=1]
 
@@ -28,6 +29,7 @@ _sections_unfolded = [ "Material", "Transform", "Visibility", "Z Index" ]
 
 [node name="Playfield" type="Node2D" parent="." index="0"]
 
+editor/display_folded = true
 position = Vector2( 42.9154, 20.4823 )
 scale = Vector2( 2, 2 )
 script = ExtResource( 1 )
@@ -70,7 +72,6 @@ margin_right = 325.0
 margin_bottom = 292.0
 rect_scale = Vector2( 0.5, 0.5 )
 rect_pivot_offset = Vector2( 0, 0 )
-rect_clip_content = false
 mouse_filter = 0
 mouse_default_cursor_shape = 0
 size_flags_horizontal = 1
@@ -90,7 +91,6 @@ margin_top = 39.0
 margin_right = 185.0
 margin_bottom = 111.0
 rect_pivot_offset = Vector2( 0, 0 )
-rect_clip_content = false
 mouse_filter = 2
 mouse_default_cursor_shape = 0
 size_flags_horizontal = 1
@@ -113,7 +113,6 @@ margin_top = 65.0
 margin_right = 164.0
 margin_bottom = 137.0
 rect_pivot_offset = Vector2( 0, 0 )
-rect_clip_content = false
 mouse_filter = 2
 mouse_default_cursor_shape = 0
 size_flags_horizontal = 1
@@ -138,7 +137,6 @@ margin_top = 202.0
 margin_right = 188.0
 margin_bottom = 274.0
 rect_pivot_offset = Vector2( 0, 0 )
-rect_clip_content = false
 mouse_filter = 2
 mouse_default_cursor_shape = 0
 size_flags_horizontal = 1
@@ -161,7 +159,6 @@ margin_top = 72.0
 margin_right = 151.0
 margin_bottom = 144.0
 rect_pivot_offset = Vector2( 0, 0 )
-rect_clip_content = false
 mouse_filter = 2
 mouse_default_cursor_shape = 0
 size_flags_horizontal = 1
@@ -183,11 +180,18 @@ anchor_bottom = 0.0
 margin_right = 40.0
 margin_bottom = 40.0
 rect_pivot_offset = Vector2( 0, 0 )
-rect_clip_content = false
 mouse_filter = 0
 mouse_default_cursor_shape = 0
 size_flags_horizontal = 1
 size_flags_vertical = 1
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." index="2"]
+
+stream = ExtResource( 6 )
+volume_db = -0.22
+autoplay = true
+mix_target = 0
+bus = "Master"
 
 [connection signal="timeout" from="Playfield/FallTimer" to="Playfield" method="_on_FallTimer_timeout"]
 

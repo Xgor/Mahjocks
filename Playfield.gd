@@ -51,8 +51,6 @@ func _input(event):
 	pass
 
 func _process(delta):
-#	print(Input.is_action_pressed("ui_right"))
-	
 	#if not fall():
 	if Input.is_action_just_pressed("play_left"):
 		move_left()
@@ -255,19 +253,58 @@ func tryRotateTo(direction):
 		if not tileCollision(playerBlockPos.x,playerBlockPos.y-1):
 			playerPieceDir = dir.up
 			return true
+		elif not tileCollision(playerBlockPos.x,playerBlockPos.y+1):
+			playerPieceDir = dir.up
+			playerBlockPos.y += 1
+			return true
+		else:
+			reverseDirection()
 	elif direction == dir.left:
 		if not tileCollision(playerBlockPos.x-1,playerBlockPos.y):
 			playerPieceDir = dir.left
 			return true
+		elif not tileCollision(playerBlockPos.x+1,playerBlockPos.y):
+			playerPieceDir = dir.left
+			playerBlockPos.x += 1
+			return true
+		else:
+			reverseDirection()
 	elif direction == dir.down:
 		if not tileCollision(playerBlockPos.x,playerBlockPos.y+1):
 			playerPieceDir = dir.down
 			return true
+		elif not tileCollision(playerBlockPos.x,playerBlockPos.y-1):
+			playerPieceDir = dir.down
+			playerBlockPos.y -= 1
+			return true
+		else:
+			reverseDirection()
 	elif direction == dir.right:
 		if not tileCollision(playerBlockPos.x+1,playerBlockPos.y):
 			playerPieceDir = dir.right
 			return true
+		elif not tileCollision(playerBlockPos.x-1,playerBlockPos.y):
+			playerPieceDir = dir.right
+			playerBlockPos.x -= 1
+			return true
+		else:
+			reverseDirection()
+			
 	return false
+
+func reverseDirection():
+	if playerPieceDir == dir.up:
+		playerPieceDir = dir.down
+		playerBlockPos.y -= 1
+	elif playerPieceDir == dir.left:
+		playerPieceDir = dir.right
+		playerBlockPos.x = 1
+	elif playerPieceDir == dir.down:
+		playerPieceDir = dir.up
+		playerBlockPos.y += 1
+	elif playerPieceDir == dir.right:
+		playerPieceDir = dir.left
+		playerBlockPos.x -= 1
 
 func _draw():
 	for x in range(0,playfieldSize.x):
