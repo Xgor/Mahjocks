@@ -47,11 +47,9 @@ func _ready():
 	newPiece()
 	#		blockField[x][y]=int(rand_range(-2,0)) #rand_range(0,8)'
 
-func _input(event):
-#	if event.is_action_pressed("play_left"):
-	pass
 
 func _process(delta):
+	
 	#if not fall():
 	if Input.is_action_just_pressed("play_left"):
 		move_left()
