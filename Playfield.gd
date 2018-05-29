@@ -19,6 +19,7 @@ var centerPieceTile = 0
 var sidePieceTile = 0
 var tilesToUse = 8
 var comboCount = 0
+var highscore = 0
 export var fallSpeed = 20
 
 var tilesPool = PoolByteArray()
@@ -110,6 +111,7 @@ func matchPieces():
 		comboCount += 1
 		$Scoreboard.addScore(scoreToAdd*comboCount)
 		blockField = fieldCopy
+		$Flip.play()
 		return true
 	return false
 
@@ -196,6 +198,7 @@ func placePiece():
 	if playerPieceDir == dir.down:
 		blockField[playerBlockPos.x][playerBlockPos.y+1] = sidePieceTile
 #	matchPieces()
+	$Land.play()
 	newPiece()
 
 func newPiece():
@@ -235,6 +238,7 @@ func rotate_clockwise():
 		tryRotateTo(dir.down)
 	elif playerPieceDir == dir.down:
 		tryRotateTo(dir.left)
+	$Rotate.play()
 	pass
 
 func rotate_counterClockwise():
@@ -246,6 +250,7 @@ func rotate_counterClockwise():
 		tryRotateTo(dir.down)
 	elif playerPieceDir == dir.down:
 		tryRotateTo(dir.right)
+	$Rotate.play()
 	pass
 
 func tryRotateTo(direction):
@@ -354,7 +359,17 @@ func flipTiles():
 	return somethingFlipped
 
 func failed():
+	updateHighScore()
 	get_tree().reload_current_scene()
+
+func updateHighScore():
+	var highscore = 0
+	if $Scoreboard.score > $Scoreboard.highScore:
+		print("hello")
+		var save_game = File.new()
+		save_game.open("user://Mahjocks.save", File.WRITE)
+		save_game.store_32($Scoreboard.score)
+		save_game.close()
 
 func _on_FallTimer_timeout():
 	move_drop()

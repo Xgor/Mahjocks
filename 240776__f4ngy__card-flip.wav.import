@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/240776__f4ngy__card-flip.wav-d2ae4e50a7fb2b7e67ffc6d3bf11897d.sample"
+
+[deps]
+
+source_file="res://240776__f4ngy__card-flip.wav"
+source_md5="2dd4d94461faf72c3bba3a4e82255c95"
+
+dest_files=[ "res://.import/240776__f4ngy__card-flip.wav-d2ae4e50a7fb2b7e67ffc6d3bf11897d.sample" ]
+dest_md5="1745371690c5b289d2f6537ce0c0a7f6"
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=true
+edit/normalize=true
+edit/loop=false
+compress/mode=0

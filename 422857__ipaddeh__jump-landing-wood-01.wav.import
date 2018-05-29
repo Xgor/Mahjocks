@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/422857__ipaddeh__jump-landing-wood-01.wav-26799132b6bc6969df574e25c7b7d01d.sample"
+
+[deps]
+
+source_file="res://422857__ipaddeh__jump-landing-wood-01.wav"
+source_md5="4b8216ff9a641a9d3519d1933e1cbfc1"
+
+dest_files=[ "res://.import/422857__ipaddeh__jump-landing-wood-01.wav-26799132b6bc6969df574e25c7b7d01d.sample" ]
+dest_md5="555878779373921245d70f70c7c765f0"
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=true
+edit/normalize=true
+edit/loop=false
+compress/mode=0

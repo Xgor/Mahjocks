@@ -7,10 +7,16 @@ extends Panel
 var score = 0
 var currentLevel = 1
 var playfield
+var highScore = 0
 
 func _ready():
 	
-#	playfield = get_owner()
+	var save_game = File.new()
+	if save_game.file_exists("user://Mahjocks.save"):
+		print("eeh")
+		save_game.open("user://Mahjocks.save", File.READ)
+		highScore = save_game.get_32() 
+	save_game.close()
 	updateLabels()
 	pass
 
@@ -40,7 +46,7 @@ func levelUp():
 func updateLabels():
 	$Score/Number.text = str(score)
 	$Level/Number.text = str(currentLevel)
-
+	$HighScore/Number.text = str(highScore)
 
 #func _process(delta):
 #	# Called every frame. Delta is time since last frame.

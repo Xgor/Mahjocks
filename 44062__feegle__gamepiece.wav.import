@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/44062__feegle__gamepiece.wav-58f5c51d020d03da99a3da10e2905afc.sample"
+
+[deps]
+
+source_file="res://44062__feegle__gamepiece.wav"
+source_md5="ff37d52b420f0783a36d94b66277d14c"
+
+dest_files=[ "res://.import/44062__feegle__gamepiece.wav-58f5c51d020d03da99a3da10e2905afc.sample" ]
+dest_md5="38a2b6add5f705d109f6503632929258"
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=true
+edit/normalize=true
+edit/loop=false
+compress/mode=0
